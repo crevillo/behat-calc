@@ -9,5 +9,6 @@ Feature: Test calculator
     And I enter 5 in the second field
     And I select sum as the operation
     And I should see "Has escogido la operación +" in the popup
+    And I confirm the popup
     And I click the button
     Then I should see 3 + 5 = 8
