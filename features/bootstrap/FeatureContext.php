@@ -25,13 +25,15 @@ class FeatureContext implements Context
     public function __construct()
     {
         $this->mink = new Mink(array(
-            'goutte' => new Session(new GoutteDriver(new \Goutte\Client())),
+            'selenium2' => new Session(new \Behat\Mink\Driver\Selenium2Driver(
+                'chrome'
+            )),
         ));
     }
 
     private function getSession()
     {
-        return $this->mink->getSession('goutte');
+        return $this->mink->getSession('selenium2');
     }
 
     /**
@@ -49,6 +51,7 @@ class FeatureContext implements Context
     {
         $page = $this->getSession()->getPage();
         $page->fillField('x', $arg1);
+        sleep(1);
     }
 
     /**
@@ -58,6 +61,7 @@ class FeatureContext implements Context
     {
         $page = $this->getSession()->getPage();
         $page->fillField('y', $arg1);
+        sleep(1);
     }
 
     /**
@@ -67,6 +71,7 @@ class FeatureContext implements Context
     {
         $page = $this->getSession()->getPage();
         $page->selectFieldOption('op', '+');
+        sleep(1);
     }
 
     /**
@@ -76,6 +81,7 @@ class FeatureContext implements Context
     {
         $page = $this->getSession()->getPage();
         $page->pressButton('calc');
+        sleep(1);
     }
 
     /**
@@ -88,5 +94,7 @@ class FeatureContext implements Context
             throw new \Exception('Content not found in page');
         }
     }
+
+    
 
 }

@@ -52,7 +52,8 @@ extract($_GET);
 
     x = <input type="text" name="x" size="5" value="<?php print $x; ?>"/>
     op =
-    <select name="op">
+    <select name="op" id="op">
+        <option value=""></option>
         <option value="+" <?php if ($op=='+') echo 'selected="selected"';?>>+</option>
         <option value="-" <?php if ($op=='-') echo 'selected="selected"';?>>-</option>
         <option value="*" <?php if ($op=='*') echo 'selected="selected"';?>>*</option>
@@ -82,6 +83,14 @@ if(isset($calc)) {
 ?>
 <hr height="2px" align="left" width="340px" />
 <p>info: <a href="calculator.html">Instrucciones</a></p>
+
+<script>
+    window.onload = function(e) {
+        document.getElementById('op').onchange = function(e) {
+            alert('Has escogido la operación ' + this.value);
+        }
+    }
+</script>
 
 </body>
 </html>
