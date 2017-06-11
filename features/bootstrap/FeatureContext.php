@@ -4,13 +4,16 @@ use Behat\Behat\Context\Context;
 use Behat\Gherkin\Node\PyStringNode;
 use Behat\Gherkin\Node\TableNode;
 use Behat\Behat\Tester\Exception\PendingException;
+use Behat\Mink\Mink;
+use Behat\Mink\Session;
+use Behat\Mink\Driver\GoutteDriver;
 
 /**
  * Defines application features from the specific context.
  */
 class FeatureContext implements Context
 {
-    protected $session;
+    protected $mink;
 
     /**
      * Initializes context.
@@ -21,10 +24,14 @@ class FeatureContext implements Context
      */
     public function __construct()
     {
-        $driver = new \Behat\Mink\Driver\GoutteDriver();
-        $session = new \Behat\Mink\Session($driver);
+        $this->mink = new Mink(array(
+            'goutte' => new Session(new GoutteDriver(new \Goutte\Client())),
+        ));
+    }
 
-        $this->session = $session;
+    private function getSession()
+    {
+        return $this->mink->getSession('goutte');
     }
 
     /**
@@ -32,7 +39,7 @@ class FeatureContext implements Context
      */
     public function iAmInTheCalculatorPage()
     {
-        $this->session->visit('http://calculator');
+        $this->getSession()->visit('http://calculator');
     }
 
     /**
@@ -40,7 +47,7 @@ class FeatureContext implements Context
      */
     public function iEnterInTheFirstField($arg1)
     {
-        $page = $this->session->getPage();
+        $page = $this->getSession()->getPage();
         $page->fillField('x', $arg1);
     }
 
@@ -49,7 +56,7 @@ class FeatureContext implements Context
      */
     public function iEnterInTheSecondField($arg1)
     {
-        $page = $this->session->getPage();
+        $page = $this->getSession()->getPage();
         $page->fillField('y', $arg1);
     }
 
@@ -58,7 +65,7 @@ class FeatureContext implements Context
      */
     public function iSelectSumAsTheOperation()
     {
-        $page = $this->session->getPage();
+        $page = $this->getSession()->getPage();
         $page->selectFieldOption('op', '+');
     }
 
@@ -67,7 +74,7 @@ class FeatureContext implements Context
      */
     public function iClickTheButton()
     {
-        $page = $this->session->getPage();
+        $page = $this->getSession()->getPage();
         $page->pressButton('calc');
     }
 
@@ -76,7 +83,7 @@ class FeatureContext implements Context
      */
     public function iShouldSee($arg1, $arg2, $arg3)
     {
-        $page = $this->session->getPage();
+        $page = $this->getSession()->getPage();
         if (!$page->hasContent("$arg1 + $arg2 = $arg3")) {
             throw new \Exception('Content not found in page');
         }
