@@ -7,41 +7,19 @@ use Behat\Behat\Tester\Exception\PendingException;
 use Behat\Mink\Mink;
 use Behat\Mink\Session;
 use Behat\Mink\Driver\GoutteDriver;
+use Behat\MinkExtension\Context\MinkContext;
 
 /**
  * Defines application features from the specific context.
  */
-class FeatureContext implements Context
+class FeatureContext extends MinkContext implements Context
 {
-    protected $mink;
-
-    /**
-     * Initializes context.
-     *
-     * Every scenario gets its own context instance.
-     * You can also pass arbitrary arguments to the
-     * context constructor through behat.yml.
-     */
-    public function __construct()
-    {
-        $this->mink = new Mink(array(
-            'selenium2' => new Session(new \Behat\Mink\Driver\Selenium2Driver(
-                'chrome'
-            )),
-        ));
-    }
-
-    private function getSession()
-    {
-        return $this->mink->getSession('selenium2');
-    }
-
     /**
      * @Given I am in the calculator page
      */
     public function iAmInTheCalculatorPage()
     {
-        $this->getSession()->visit('http://calculator');
+        $this->visit('/');
     }
 
     /**
@@ -49,8 +27,7 @@ class FeatureContext implements Context
      */
     public function iEnterInTheFirstField($arg1)
     {
-        $page = $this->getSession()->getPage();
-        $page->fillField('x', $arg1);
+        $this->fillField('x', $arg1);
         sleep(1);
     }
 
@@ -59,8 +36,7 @@ class FeatureContext implements Context
      */
     public function iEnterInTheSecondField($arg1)
     {
-        $page = $this->getSession()->getPage();
-        $page->fillField('y', $arg1);
+        $this->fillField('y', $arg1);
         sleep(1);
     }
 
@@ -69,8 +45,7 @@ class FeatureContext implements Context
      */
     public function iSelectSumAsTheOperation()
     {
-        $page = $this->getSession()->getPage();
-        $page->selectFieldOption('op', '+');
+        $this->selectOption('op', '+');
         sleep(1);
     }
 
@@ -79,8 +54,7 @@ class FeatureContext implements Context
      */
     public function iClickTheButton()
     {
-        $page = $this->getSession()->getPage();
-        $page->pressButton('calc');
+        $this->pressButton('Calculate');
         sleep(1);
     }
 
